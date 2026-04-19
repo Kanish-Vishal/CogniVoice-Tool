@@ -1,0 +1,6 @@
+{
+  "name": "CogniVoice AI",
+  "description": "An AI-powered dementia speech pattern detector that analyzes linguistic markers and vocal characteristics to assess potential cognitive risk. (Research tool only, not for medical diagnosis)",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": []
+}
