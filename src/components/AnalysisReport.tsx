@@ -48,26 +48,26 @@ export function AnalysisReport({ result, t }: AnalysisReportProps) {
             <CardTitle className="text-sm font-medium uppercase tracking-wider text-zinc-500">{t.analysisSummary}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center text-center p-6 pt-0">
-            <div className="relative w-32 h-32 mb-4 flex items-center justify-center">
+            <div className="relative w-48 h-48 mb-4 flex items-center justify-center">
               <svg className="w-full h-full transform -rotate-90">
                 <circle
-                  cx="64"
-                  cy="64"
-                  r="58"
+                  cx="96"
+                  cy="96"
+                  r="90"
                   stroke="currentColor"
-                  strokeWidth="8"
+                  strokeWidth="10"
                   fill="transparent"
                   className="text-zinc-100"
                 />
                 <circle
-                  cx="64"
-                  cy="64"
-                  r="58"
+                  cx="96"
+                  cy="96"
+                  r="90"
                   stroke="currentColor"
-                  strokeWidth="8"
+                  strokeWidth="10"
                   fill="transparent"
-                  strokeDasharray={364.4}
-                  strokeDashoffset={364.4 - (364.4 * result.riskScore) / 100}
+                  strokeDasharray={565.5}
+                  strokeDashoffset={565.5 - (565.5 * result.riskScore) / 100}
                   className={cn(
                     "transition-all duration-1000",
                     result.riskScore < 30 ? "text-emerald-500" : 
@@ -77,8 +77,8 @@ export function AnalysisReport({ result, t }: AnalysisReportProps) {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-bold">{result.riskScore}</span>
-                <span className="text-[10px] text-zinc-500 uppercase tracking-tighter">{t.indicator}</span>
+                <span className="text-5xl font-bold">{result.riskScore}</span>
+                <span className="text-xs text-zinc-500 uppercase tracking-tighter font-bold">{t.indicator}</span>
               </div>
             </div>
             <Badge className={cn("mb-2", getRiskColor(result.riskScore))}>
@@ -98,7 +98,7 @@ export function AnalysisReport({ result, t }: AnalysisReportProps) {
           <CardHeader>
             <CardTitle className="text-sm font-medium uppercase tracking-wider text-zinc-500">{t.patternSignature}</CardTitle>
           </CardHeader>
-          <CardContent className="h-[200px]">
+          <CardContent className="h-[320px]">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
                 <PolarGrid stroke="#e4e4e7" />

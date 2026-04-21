@@ -90,7 +90,7 @@ export default function App() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-12 max-w-4xl">
+      <main className="container mx-auto px-4 py-12 max-w-screen-2xl">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
           <div className="flex flex-col items-center gap-6">
             <TabsList className="bg-zinc-100 p-1 rounded-full w-fit">
@@ -142,37 +142,36 @@ export default function App() {
                   
                   <AudioRecorder onRecordingComplete={handleRecordingComplete} isAnalyzing={isAnalyzing} analysisStatus={analysisStatus} t={t} />
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="md:col-span-1 space-y-6">
-                      <SamplePrompts t={t} />
-                      <div className="grid grid-cols-1 gap-4">
-                        <Card className="bg-white border-zinc-200">
-                          <CardContent className="pt-6 flex gap-4">
-                            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-                              <Info className="text-blue-600 h-5 w-5" />
-                            </div>
-                            <div className="space-y-1">
-                              <p className="font-semibold text-sm">{t.howItWorks}</p>
-                              <p className="text-xs text-zinc-500 leading-relaxed">
-                                {t.howItWorksDesc}
-                              </p>
-                            </div>
-                          </CardContent>
-                        </Card>
-                        <Card className="bg-white border-zinc-200">
-                          <CardContent className="pt-6 flex gap-4">
-                            <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
-                              <AlertCircle className="text-amber-600 h-5 w-5" />
-                            </div>
-                            <div className="space-y-1">
-                              <p className="font-semibold text-sm">{t.researchPromptTitle}</p>
-                              <p className="text-xs text-zinc-500 leading-relaxed">
-                                {t.researchPromptDesc}
-                              </p>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </div>
+                  <div className="space-y-8">
+                    <SamplePrompts t={t} />
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <Card className="bg-white border-zinc-200">
+                        <CardContent className="pt-6 flex gap-4">
+                          <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+                            <Activity className="text-blue-600 h-5 w-5" />
+                          </div>
+                          <div className="space-y-1">
+                            <p className="font-semibold text-sm">{t.howItWorks}</p>
+                            <p className="text-xs text-zinc-500 leading-relaxed">
+                              {t.howItWorksDesc}
+                            </p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      <Card className="bg-white border-zinc-200">
+                        <CardContent className="pt-6 flex gap-4">
+                          <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
+                            <AlertCircle className="text-amber-600 h-5 w-5" />
+                          </div>
+                          <div className="space-y-1">
+                            <p className="font-semibold text-sm">{t.researchPromptTitle}</p>
+                            <p className="text-xs text-zinc-500 leading-relaxed">
+                              {t.researchPromptDesc}
+                            </p>
+                          </div>
+                        </CardContent>
+                      </Card>
                     </div>
                   </div>
                 </motion.div>
@@ -302,23 +301,27 @@ export default function App() {
                 {history.length === 0 ? (
                   <div className="py-12 text-center text-zinc-500 italic">{t.noHistory}</div>
                 ) : (
-                  <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {history.map(item => (
-                      <div key={item.id} className="p-4 border rounded-xl hover:bg-zinc-50 transition-colors group cursor-pointer">
-                        <div className="flex justify-between items-start mb-2">
-                          <div>
-                            <p className="font-bold text-sm">{item.date}</p>
-                            <p className="text-xs text-zinc-500">{t.riskIndicator}: {item.result.riskScore}%</p>
+                      <div key={item.id} className="p-5 border rounded-2xl hover:bg-zinc-50 transition-all hover:shadow-md group cursor-pointer bg-white flex flex-col h-full">
+                        <div className="flex justify-between items-start mb-4">
+                          <div className="space-y-1">
+                            <p className="font-bold text-sm tracking-tight text-zinc-900">{item.date}</p>
+                            <Badge variant="secondary" className="text-[10px] uppercase font-bold tracking-widest bg-zinc-100">
+                              {t.riskIndicator}: {item.result.riskScore}%
+                            </Badge>
                           </div>
                           <div className={cn(
-                            "w-2 h-2 rounded-full",
+                            "w-3 h-3 rounded-full shadow-sm ring-2 ring-white",
                             item.result.riskScore < 30 ? "bg-emerald-500" : 
                             item.result.riskScore < 60 ? "bg-amber-500" : "bg-rose-500"
                           )} />
                         </div>
                         {item.transcript && (
-                          <div className="mt-2 pl-3 border-l-2 border-zinc-100">
-                            <p className="text-xs text-zinc-400 line-clamp-2 italic">"{item.transcript}"</p>
+                          <div className="mt-auto pt-4 border-t border-zinc-50">
+                            <p className="text-xs text-zinc-500 line-clamp-3 italic leading-relaxed">
+                              "{item.transcript}"
+                            </p>
                           </div>
                         )}
                       </div>
