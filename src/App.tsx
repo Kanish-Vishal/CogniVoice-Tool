@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { BrainCircuit, History, Info, Activity, Database, AlertCircle, Quote } from 'lucide-react';
+import { BrainCircuit, History, Info, Activity, Database, AlertCircle, Quote, Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { AudioRecorder } from './components/AudioRecorder';
 import { AnalysisReport } from './components/AnalysisReport';
 import { SamplePrompts } from './components/SamplePrompts';
+import { MemoryJournal } from './components/MemoryJournal';
 import { analyzeSpeech } from './lib/gemini';
 import { AnalysisResult, HistoryItem } from './types';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -16,10 +18,20 @@ import { cn } from '@/lib/utils';
 
 export default function App() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisStatus, setAnalysisStatus] = useState('');
   const [currentResult, setCurrentResult] = useState<AnalysisResult | null>(null);
+
+  const statusMessages = [
+    'Listening to patterns...',
+    'Analyzing linguistic richness...',
+    'Checking vocal stability...',
+    'Comparing with research data...',
+    'Finalizing your report...'
+  ];
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [activeTab, setActiveTab] = useState('assess');
   const [selectedLanguage, setSelectedLanguage] = useState('English');
+  const [showResearch, setShowResearch] = useState(false);
 
   const t = translations[selectedLanguage] || translations.English;
 
@@ -35,8 +47,17 @@ export default function App() {
 
   const handleRecordingComplete = async (base64Audio: string, mimeType: string) => {
     setIsAnalyzing(true);
+    setAnalysisStatus(statusMessages[0]);
+    const statusInterval = setInterval(() => {
+      setAnalysisStatus(prev => {
+        const idx = statusMessages.indexOf(prev);
+        return statusMessages[(idx + 1) % statusMessages.length];
+      });
+    }, 4000);
+
     try {
       const analysis = await analyzeSpeech(base64Audio, mimeType, selectedLanguage);
+      clearInterval(statusInterval);
       setCurrentResult(analysis);
       
       const newHistoryItem: HistoryItem = {
@@ -119,42 +140,99 @@ export default function App() {
                     </div>
                   </div>
                   
-                  <AudioRecorder onRecordingComplete={handleRecordingComplete} isAnalyzing={isAnalyzing} t={t} />
+                  <AudioRecorder onRecordingComplete={handleRecordingComplete} isAnalyzing={isAnalyzing} analysisStatus={analysisStatus} t={t} />
                   
-                  <SamplePrompts t={t} />
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Card className="bg-white border-zinc-200">
-                      <CardContent className="pt-6 flex gap-4">
-                        <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-                          <Info className="text-blue-600 h-5 w-5" />
-                        </div>
-                        <div className="space-y-1">
-                          <p className="font-semibold text-sm">{t.howItWorks}</p>
-                          <p className="text-xs text-zinc-500 leading-relaxed">
-                            {t.howItWorksDesc}
-                          </p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                    <Card className="bg-white border-zinc-200">
-                      <CardContent className="pt-6 flex gap-4">
-                        <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
-                          <AlertCircle className="text-amber-600 h-5 w-5" />
-                        </div>
-                        <div className="space-y-1">
-                          <p className="font-semibold text-sm">{t.researchPromptTitle}</p>
-                          <p className="text-xs text-zinc-500 leading-relaxed">
-                            {t.researchPromptDesc}
-                          </p>
-                        </div>
-                      </CardContent>
-                    </Card>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="md:col-span-1 space-y-6">
+                      <SamplePrompts t={t} />
+                      <div className="grid grid-cols-1 gap-4">
+                        <Card className="bg-white border-zinc-200">
+                          <CardContent className="pt-6 flex gap-4">
+                            <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+                              <Info className="text-blue-600 h-5 w-5" />
+                            </div>
+                            <div className="space-y-1">
+                              <p className="font-semibold text-sm">{t.howItWorks}</p>
+                              <p className="text-xs text-zinc-500 leading-relaxed">
+                                {t.howItWorksDesc}
+                              </p>
+                            </div>
+                          </CardContent>
+                        </Card>
+                        <Card className="bg-white border-zinc-200">
+                          <CardContent className="pt-6 flex gap-4">
+                            <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
+                              <AlertCircle className="text-amber-600 h-5 w-5" />
+                            </div>
+                            <div className="space-y-1">
+                              <p className="font-semibold text-sm">{t.researchPromptTitle}</p>
+                              <p className="text-xs text-zinc-500 leading-relaxed">
+                                {t.researchPromptDesc}
+                              </p>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </div>
                   </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="report"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="space-y-6"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h2 className="text-2xl font-bold">{t.reportTitle}</h2>
+                    <button 
+                      onClick={() => setCurrentResult(null)}
+                      className="text-sm font-medium text-zinc-500 hover:text-zinc-900"
+                    >
+                      {t.newAssessment}
+                    </button>
+                  </div>
+                  <AnalysisReport result={currentResult} t={t} />
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-                  {/* More Info Segment (Moved from Research Tab) */}
-                  <div className="pt-20 space-y-12">
-                    <section className="space-y-4">
+            {/* Persistent Content Below Recorder/Report */}
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="md:col-span-2">
+                <div id="memory-journal">
+                  <MemoryJournal t={t} language={selectedLanguage} />
+                </div>
+              </div>
+              
+              <div className="md:col-span-1">
+                {/* Research Segment Toggle - Moved inside persistent area */}
+                <div className="flex flex-col items-center justify-start h-full">
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => setShowResearch(!showResearch)}
+                    className="text-zinc-500 hover:text-zinc-900 font-bold uppercase text-[10px] tracking-widest gap-2 bg-zinc-50/50 w-full rounded-2xl py-8"
+                  >
+                    {showResearch ? t.hideResearch || 'Hide Research' : t.viewResearch || 'Show Research & Science'}
+                    <motion.div animate={{ rotate: showResearch ? 180 : 0 }}>
+                      <Activity size={12} />
+                    </motion.div>
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <AnimatePresence>
+              {showResearch && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="overflow-hidden w-full pb-12"
+                >
+                  <div className="pt-12 space-y-12">
+                    <section className="space-y-4 text-left">
                       <h3 className="text-xl font-bold flex items-center gap-2">
                         <Info size={20} className="text-zinc-400" />
                         {t.scientificFoundations}
@@ -165,10 +243,10 @@ export default function App() {
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {[
-                          { title: t.vocabularyVariety, desc: 'How well you use different words.' },
-                          { title: t.meaningfulness, desc: 'How much meaning is in your sentences.' },
-                          { title: t.sentenceStyle, desc: 'How you put words together into phrases.' },
-                          { title: t.speechSmoothness, desc: 'How smoothly you talk without getting stuck.' }
+                          { title: t.vocabularyVariety, desc: t.vocabularyVarietyDesc },
+                          { title: t.meaningfulness, desc: t.meaningfulnessDesc },
+                          { title: t.sentenceStyle, desc: t.sentenceStyleDesc },
+                          { title: t.speechSmoothness, desc: t.speechSmoothnessDesc }
                         ].map((item, idx) => (
                           <Card key={idx} className="bg-zinc-900 border-none">
                             <CardContent className="pt-4">
@@ -181,7 +259,7 @@ export default function App() {
                       </div>
                     </section>
 
-                    <section className="space-y-4">
+                    <section className="space-y-4 text-left">
                       <h3 className="text-xl font-bold flex items-center gap-2">
                         <Database className="h-5 w-5 text-zinc-400" />
                         {t.sourceDatasets}
@@ -208,23 +286,6 @@ export default function App() {
                       </Alert>
                     </section>
                   </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="space-y-6"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-2xl font-bold">{t.reportTitle}</h2>
-                    <button 
-                      onClick={() => setCurrentResult(null)}
-                      className="text-sm font-medium text-zinc-500 hover:text-zinc-900"
-                    >
-                      {t.newAssessment}
-                    </button>
-                  </div>
-                  <AnalysisReport result={currentResult} t={t} />
                 </motion.div>
               )}
             </AnimatePresence>

@@ -29,10 +29,14 @@ export const translations: Record<string, any> = {
     riskLow: "Normal patterns",
     riskMedium: "Some changes found",
     riskHigh: "Significant signs found",
-    meaningfulness: "Meaningfulness",
-    sentenceStyle: "Sentence style",
     vocabularyVariety: "Vocabulary variety",
+    vocabularyVarietyDesc: "How well you use different words.",
+    meaningfulness: "Meaningfulness",
+    meaningfulnessDesc: "How much meaning is in your sentences.",
+    sentenceStyle: "Sentence style",
+    sentenceStyleDesc: "How you put words together into phrases.",
     speechSmoothness: "Speech smoothness",
+    speechSmoothnessDesc: "How smoothly you talk without getting stuck.",
     voiceSteady: "Voice steady",
     stumbles: "Stumbles",
     newAssessment: "Start Over",
@@ -46,10 +50,41 @@ export const translations: Record<string, any> = {
     medicalDisclaimerDesc: "This is for information and research only. It is NOT a doctor's diagnosis. AI can make mistakes. If you are worried about your memory, please see a doctor.",
     languageDetected: "Language Used",
     indicator: "Match Score",
+    viewResearch: "Show Research & Science",
+    hideResearch: "Hide Research & Science",
+    brainExercises: "Brain Maintenance",
+    memoryJournal: {
+      title: "Memory Journal",
+      desc: "Write down a memory or a thought. We will help you expand on it to strengthen your recall.",
+      placeholder: "Write a memory here...",
+      expand: "Expand Memory",
+      expanding: "Recollecting...",
+      start: "Start Memory Journaling",
+    },
+    tailoredRecs: {
+      low: [
+        "Maintain cognitive reserve through daily reading and learning new skills.",
+        "Social engagement: Join local community groups or senior activity centers.",
+        "Physical exercise: Aim for 150 minutes of moderate activity weekly.",
+        "Follow a Mediterranean-DASH Intervention for Neurodegenerative Delay (MIND) diet."
+      ],
+      medium: [
+        "Consult a General Practitioner (GP) for a cognitive assessment (e.g., MOCA or MMSE).",
+        "Perform a blood test to check for reversible causes like Vitamin B12 deficiency.",
+        "Implement memory aids: Use a 'Daily Memory Folder' for keys, wallet, and planner.",
+        "Cognitive training: Dedicate 30 minutes daily to structured brain exercises."
+      ],
+      high: [
+        "Immediate Referral: Consult a Geriatrician or Memory Clinic for a full diagnostic workup.",
+        "Safety Assessment: Evaluate home environment for fall risks and wandering potential.",
+        "Legal & Financial Planning: Discuss Lasting Power of Attorney (LPA) with family.",
+        "Structured Support: Explore day care services or specialized cognitive therapy."
+      ]
+    },
     prompts: {
       stimulus: {
-        title: "Describe a Picture",
-        desc: "Tell us what you see in the 'Cookie Theft' picture. Who is doing what?"
+        title: "Picture Scene",
+        desc: "Describe what is happening in the scene below."
       },
       memory: {
         title: "Tell a Story",
@@ -92,9 +127,13 @@ export const translations: Record<string, any> = {
     riskMedium: "发现一些变化",
     riskHigh: "发现显著迹象",
     meaningfulness: "表达意义",
+    meaningfulnessDesc: "您的句子中所包含的实际意义有多少。",
     sentenceStyle: "句子风格",
+    sentenceStyleDesc: "您如何将词汇组合成短语和句子。",
     vocabularyVariety: "词汇多样性",
+    vocabularyVarietyDesc: "您使用不同词汇的熟练程度。",
     speechSmoothness: "说话顺畅度",
+    speechSmoothnessDesc: "您在说话时是否顺畅，有没有卡顿。",
     voiceSteady: "声音稳定性",
     stumbles: "停顿与犹豫",
     newAssessment: "重新测试",
@@ -108,10 +147,41 @@ export const translations: Record<string, any> = {
     medicalDisclaimerDesc: "本应用仅供信息参考和研究。它不是医生的正式诊断。人工智能可能会出错。如果您对记忆力有顾虑，请咨询医生。",
     languageDetected: "使用的语言",
     indicator: "匹配分数",
+    viewResearch: "查看科研与科学背景",
+    hideResearch: "隐藏科研内容",
+    brainExercises: "大脑维护",
+    memoryJournal: {
+      title: "记忆日记",
+      desc: "写下一个回忆或想法。我们将帮助您扩展它，以加强您的回忆能力。",
+      placeholder: "在此写下回忆...",
+      expand: "扩展记忆",
+      expanding: "正在回忆...",
+      start: "开始记忆日记",
+    },
+    tailoredRecs: {
+      low: [
+        "通过日常阅读和学习新技能来维持认知储备。",
+        "社会参与：加入当地社区团体或老年活动中心。",
+        "体育锻炼：目标是每周进行 150 分钟的中等强度活动。",
+        "遵循 MIND 饮食法，预防神经退行性疾病。"
+      ],
+      medium: [
+        "咨询全科医生 (GP) 进行认知评估（如 MOCA 或 MMSE）。",
+        "进行血液检查以检查维生素 B12 缺乏等可逆原因。",
+        "实施记忆辅助工具：使用“每日记忆夹”存放钥匙、钱包和规划手册。",
+        "认知训练：每天花 30 分钟进行结构化的大脑练习。"
+      ],
+      high: [
+        "立即转诊：咨询老年科医生或记忆诊所进行全面诊断检查。",
+        "安全评估：评估家庭环境是否存在跌倒风险和走失可能性。",
+        "法律和财务规划：与家人讨论持久授权书 (LPA)。",
+        "结构化支持：探索日间护理服务或专门的认知疗法。"
+      ]
+    },
     prompts: {
       stimulus: {
-        title: "描述一张图片",
-        desc: "请详细描述图中“偷饼干”的场景。大家都在做什么？"
+        title: "图片场景",
+        desc: "请描述下图中正在发生的事情。"
       },
       memory: {
         title: "讲一个故事",
@@ -150,6 +220,37 @@ export const translations: Record<string, any> = {
     historyDesc: "Lihat semakan terdahulu anda di sini untuk melihat jika keadaan kekal sama.",
     noHistory: "Tiada rekod ditemui.",
     riskIndicator: "Padanan Corak",
+    viewResearch: "Paparkan Penyelidikan & Sains",
+    hideResearch: "Sembunyikan Penyelidikan",
+    brainExercises: "Penyelenggaraan Minda",
+    memoryJournal: {
+      title: "Jurnal Memori",
+      desc: "Tuliskan memori atau fikiran. Kami akan membantu anda mengembangkannya untuk menguatkan ingatan anda.",
+      placeholder: "Tulis memori di sini...",
+      expand: "Kembangkan Memori",
+      expanding: "Mengingat kembali...",
+      start: "Mula Jurnal Memori",
+    },
+    tailoredRecs: {
+      low: [
+        "Kekalkan rizab kognitif melalui pembacaan harian dan mempelajari kemahiran baru.",
+        "Penglibatan sosial: Sertai kumpulan komuniti tempatan atau pusat aktiviti warga emas.",
+        "Senaman fizikal: Sasarkan 150 minit aktiviti sederhana setiap minggu.",
+        "Ikuti diet MIND untuk melambatkan kemerosotan neurodegeneratif."
+      ],
+      medium: [
+        "Dapatkan nasihat Doktor Perubatan (GP) untuk penilaian kognitif (cth., MOCA atau MMSE).",
+        "Lakukan ujian darah untuk memeriksa punca yang boleh dirawat seperti kekurangan Vitamin B12.",
+        "Gunakan alat bantuan memori: Gunakan 'Fail Memori Harian' untuk kunci, dompet dan perancang.",
+        "Latihan kognitif: Luangkan 30 minit setiap hari untuk senaman otak yang tersusun."
+      ],
+      high: [
+        "Rujukan Segera: Rujuk Pakar Geriatrik atau Klinik Memori untuk pemeriksaan diagnostik penuh.",
+        "Penilaian Keselamatan: Nilai persekitaran rumah untuk risiko jatuh dan potensi sesat.",
+        "Perancangan Undang-undang & Kewangan: Bincangkan Surat Kuasa Wakil Kekal (LPA) dengan keluarga.",
+        "Sokongan Tersusun: Terokai perkhidmatan penjagaan harian atau terapi kognitif khusus."
+      ]
+    },
     newAssessment: "Mula Semula",
     reportTitle: "Laporan Suara Anda",
     analysisSummary: "Ringkasan",
@@ -161,10 +262,20 @@ export const translations: Record<string, any> = {
     medicalDisclaimerDesc: "Ini adalah untuk maklumat dan penyelidikan sahaja. Ia BUKAN diagnosis doktor. AI boleh membuat kesilapan. Jika anda bimbang tentang memori anda, sila jumpa doktor.",
     languageDetected: "Bahasa Digunakan",
     indicator: "Markah Padanan",
+    meaningfulness: "Kebermaknaan",
+    meaningfulnessDesc: "Sejauh mana makna yang terdapat dalam ayat anda.",
+    sentenceStyle: "Gaya ayat",
+    sentenceStyleDesc: "Bagaimana anda menyusun kata-kata menjadi frasa.",
+    vocabularyVariety: "Kepelbagaian perbendaharaan kata",
+    vocabularyVarietyDesc: "Sejauh mana anda menggunakan perkataan yang berbeza.",
+    speechSmoothness: "Kelancaran pertuturan",
+    speechSmoothnessDesc: "Betapa lancar anda bercakap tanpa tersekat-sekat.",
+    voiceSteady: "Suara stabil",
+    stumbles: "Tersasul",
     prompts: {
       stimulus: {
-        title: "Terangkan Gambar",
-        desc: "Beritahu kami apa yang anda lihat dalam gambar 'Mencuri Biskut'. Siapa sedang buat apa?"
+        title: "Suasana Gambar",
+        desc: "Terangkan apa yang sedang berlaku dalam suasana di bawah."
       },
       memory: {
         title: "Ceritakan Kisah",
@@ -203,6 +314,37 @@ export const translations: Record<string, any> = {
     historyDesc: "காலப்போக்கில் விஷயங்கள் அப்படியே இருக்கிறதா என்று பார்க்க உங்கள் முந்தைய சோதனைகளை இங்கே பாருங்கள்.",
     noHistory: "பதிவுகள் எதுவும் இல்லை.",
     riskIndicator: "வடிவப் பொருத்தம்",
+    viewResearch: "ஆராய்ச்சி மற்றும் அறிவியலைக் காட்டு",
+    hideResearch: "ஆராய்ச்சியை மறை",
+    brainExercises: "மூளை பராமரிப்பு",
+    memoryJournal: {
+      title: "நினைவக நாட்குறிப்பு",
+      desc: "ஒரு நினைவகம் அல்லது ஒரு எண்ணத்தை எழுதுங்கள். உங்கள் நினைவாற்றலை வலுப்படுத்த நாங்கள் விரிவுபடுத்த உதவுவோம்.",
+      placeholder: "நினைவகத்தை இங்கே எழுதுங்கள்...",
+      expand: "நினைவகத்தை விரிவுபடுத்து",
+      expanding: "நினைவுபடுத்துகிறது...",
+      start: "நினைவக நாட்குறிப்பைத் தொடங்கு",
+    },
+    tailoredRecs: {
+      low: [
+        "தினசரி வாசிப்பு மற்றும் புதிய திறன்களைக் கற்றுக்கொள்வதன் மூலம் அறிவாற்றல் இருப்பைப் பராமரிக்கவும்.",
+        "சமூக ஈடுபாடு: உள்ளூர் சமூகக் குழுக்கள் அல்லது முதியோர் மையங்களில் சேரவும்.",
+        "உடல் உடற்பயிற்சி: வாரத்திற்கு 150 நிமிடங்கள் மிதமான பயிற்சியை மேற்கொள்ளுங்கள்.",
+        "நினைவாற்றல் இழப்பைக் குறைக்க MIND உணவு முறையைப் பின்பற்றவும்."
+      ],
+      medium: [
+        "அறிவாற்றல் மதிப்பீட்டிற்கு (எ.கா., MOCA அல்லது MMSE) குடும்ப மருத்துவரை அணுகவும்.",
+        "வைட்டமின் B12 குறைபாடு போன்ற சரிசெய்யக்கூடிய காரணங்களைச் சரிபார்க்க இரத்தப் பரிசோதனை செய்யுங்கள்.",
+        "நினைவக உதவிகளைப் பயன்படுத்தவும்: சாவிகள், பணப்பை மற்றும் திட்டமிடுபவர் ஆகியவற்றிற்கு 'தினசரி நினைவக கோப்பு' பயன்படுத்தவும்.",
+        "அறிவாற்றல் பயிற்சி: தினசரி 30 நிமிடங்கள் மூளைப் பயிற்சிகளுக்கு ஒதுக்குங்கள்."
+      ],
+      high: [
+        "உடனடி பரிந்துரை: முழுமையான கண்டறிதலுக்கு ஒரு முதியோர் நல நிபுணர் அல்லது நினைவக மருத்துவமனையை அணுகவும்.",
+        "பாதுகாப்பு மதிப்பீடு: வீட்டில் கீழே விழும் அபாயம் மற்றும் காணாமல் போகும் வாய்ப்புகளை மதிப்பிடுங்கள்.",
+        "சட்ட மற்றும் நிதித் திட்டமிடல்: குடும்பத்தினருடன் LPA குறித்து விவாதிக்கவும்.",
+        "கட்டமைக்கப்பட்ட ஆதரவு: பகல்நேர பராமரிப்பு சேவைகள் அல்லது சிறப்பு அறிவாற்றல் சிகிச்சையை ஆராயுங்கள்."
+      ]
+    },
     newAssessment: "மீண்டும் தொடங்கவும்",
     reportTitle: "உங்கள் பேச்சு அறிக்கை",
     analysisSummary: "சுருக்கம்",
@@ -214,10 +356,18 @@ export const translations: Record<string, any> = {
     medicalDisclaimerDesc: "இது தகவல் மற்றும் ஆராய்ச்சி நோக்கங்களுக்காக மட்டுமே. இது ஒரு மருத்துவரின் கண்டறிதல் அல்ல. AI தவறுகளைச் செய்யக்கூடும். உங்கள் நினைவாற்றல் குறித்து கவலை இருந்தால், மருத்துவரை அணுகவும்.",
     languageDetected: "பயன்படுத்தப்பட்ட மொழி",
     indicator: "பொருத்த மதிப்பெண்",
+    vocabularyVariety: "சொற்களின் வகை",
+    vocabularyVarietyDesc: "நீங்கள் எவ்வளவு சிறப்பாக வெவ்வேறு சொற்களைப் பயன்படுத்துகிறீர்கள்.",
+    meaningfulness: "பொருள் செறிந்தது",
+    meaningfulnessDesc: "உங்கள் வாக்கியங்களில் எவ்வளவு அர்த்தம் உள்ளது.",
+    sentenceStyle: "வாக்கிய நடை",
+    sentenceStyleDesc: "சொற்களை எவ்வாறு சொற்றொடர்களாக இணைக்கிறீர்கள்.",
+    speechSmoothness: "பேச்சு சரளம்",
+    speechSmoothnessDesc: "நீங்கள் எவ்வளவு சரளமாகப் பேசுகிறீர்கள்.",
     prompts: {
       stimulus: {
-        title: "ஒரு படத்தை விவரிக்கவும்",
-        desc: "'குக்கீ திருட்டு' படத்தில் நீங்கள் என்ன பார்க்கிறீர்கள் என்று எங்களிடம் கூறுங்கள். யார் என்ன செய்கிறார்கள்?"
+        title: "படக் காட்சி",
+        desc: "கீழே உள்ள காட்சியில் என்ன நடக்கிறது என்பதை விவரிக்கவும்."
       },
       memory: {
         title: "ஒரு கதை சொல்லுங்கள்",
@@ -255,7 +405,46 @@ export const translations: Record<string, any> = {
     historyTitle: "历史记录",
     historyDesc: "看汝以前的检查记录。",
     noHistory: "无记录。",
-    riskIndicator: "模式匹配度",
+    indicator: "匹配度",
+    vocabularyVariety: "用词丰富",
+    vocabularyVarietyDesc: "汝用无共词汇的熟练程度。",
+    meaningfulness: "表达意义",
+    meaningfulnessDesc: "汝讲的话有偌多实际的意义。",
+    sentenceStyle: "句子风格",
+    sentenceStyleDesc: "汝按怎将词汇组合成句子。",
+    speechSmoothness: "说话顺畅度",
+    speechSmoothnessDesc: "汝说话顺无，有卡顿无。",
+    viewResearch: "看研究甲科学背景",
+    hideResearch: "合起来",
+    brainExercises: "脑力练习",
+    memoryJournal: {
+      title: "记忆日记",
+      desc: "写落来一记回忆。阮会帮助汝讲详细，予汝的记忆力愈来愈好。",
+      placeholder: "写落来汝的回忆...",
+      expand: "讲详细",
+      expanding: "咧想...",
+      start: "开始写记忆日记",
+    },
+    tailoredRecs: {
+      low: [
+        "爱定定读书、学新物。保持脑力。",
+        "爱定定甲人说话。去联络所、活动中心。",
+        "爱定定运动。一个礼拜爱运动百分外钟。",
+        "爱重营养。食好物对抗退化。"
+      ],
+      medium: [
+        "爱去看家庭医生，做脑力检查。",
+        "爱去验血。看是不是欠维他命 B12。",
+        "爱用记事本、用文件夹放锁匙皮包，唔通乱放。",
+        "爱定定做大脑练习。"
+      ],
+      high: [
+        "爱赶紧去看老人科医生，做完整的检查。",
+        "爱注意厝内的评估。预防跋倒、预防走失。",
+        "爱甲屋下人讨论法律、钱的问题（LPA）。",
+        "爱去找专门的复健甲日间照顾。"
+      ]
+    },
     newAssessment: "重来一摆",
     reportTitle: "报告",
     analysisSummary: "摘要",
@@ -266,11 +455,10 @@ export const translations: Record<string, any> = {
     medicalDisclaimer: "重要声明",
     medicalDisclaimerDesc: "这只是供参考。唔是医生的正式诊断。请咨询医生。",
     languageDetected: "讲的话",
-    indicator: "分数",
     prompts: {
       stimulus: {
-        title: "描述一张图",
-        desc: "详细讲图中“偷饼干”的情况。"
+        title: "图中内容",
+        desc: "详细讲图中发生的事。"
       },
       memory: {
         title: "讲一个故事",
@@ -309,6 +497,37 @@ export const translations: Record<string, any> = {
     historyDesc: "睇番之前嘅记录。",
     noHistory: "仲未有记录。",
     riskIndicator: "匹配度",
+    viewResearch: "显示科研背景",
+    hideResearch: "收埋科研内容",
+    brainExercises: "脑力锻炼",
+    memoryJournal: {
+      title: "记忆日记",
+      desc: "写低一段往事。我哋会帮您细化內容，帮您强化记忆。",
+      placeholder: "喺呢度写低您嘅回忆...",
+      expand: "细化记忆",
+      expanding: "谂紧...",
+      start: "开始记忆日记",
+    },
+    tailoredRecs: {
+      low: [
+        "通过日常阅读同学习新技能嚟维持认知储备。",
+        "社交参与：参加社区团体或老友记活动中心。",
+        "体育锻炼：目标系每个礼拜做 150 分钟中等强度运动。",
+        "遵循法式饮食 (MIND diet) 嚟预防神经退化。"
+      ],
+      medium: [
+        "去睇家庭医生，做个认知评估 (例如 MOCA 或 MMSE)。",
+        "去验血。睇下系咪缺乏维他命 B12 等原因。",
+        "善用辅助工具：用“每日记忆夹”嚟放锁匙、银包同手册。",
+        "脑力训练：每日花 30 分钟做下大脑练习。"
+      ],
+      high: [
+        "即刻转介：去睇老人科医生或记忆诊所，做全面检查。",
+        "家居安全评估：睇下屋企环境有无跌亲或者走失风险。",
+        "法律同财务规划：同屋企人讨论持久授权书 (LPA)。",
+        "结构化支援：搵下日间护理服务或者专业认知疗法。"
+      ]
+    },
     newAssessment: "重新测试",
     reportTitle: "分析报告",
     analysisSummary: "摘要",
@@ -320,10 +539,18 @@ export const translations: Record<string, any> = {
     medicalDisclaimerDesc: "呢个只供参考，唔系医生诊断。有事请咨询医生。",
     languageDetected: "讲嘅语言",
     indicator: "分数",
+    vocabularyVariety: "用词丰富",
+    vocabularyVarietyDesc: "您用唔同词汇嘅熟练程度。",
+    meaningfulness: "表达意义",
+    meaningfulnessDesc: "您讲嘅话入面有几多实际意义。",
+    sentenceStyle: "句子风格",
+    sentenceStyleDesc: "您点样将词汇组合成句子。",
+    speechSmoothness: "说话顺畅度",
+    speechSmoothnessDesc: "您说话顺唔顺，有无卡顿。",
     prompts: {
       stimulus: {
-        title: "描述一张图",
-        desc: "详讲图中“偷饼干”嘅场景。"
+        title: "相中情景",
+        desc: "讲解下张相入面发生紧咩事。"
       },
       memory: {
         title: "讲个故事",
@@ -362,6 +589,37 @@ export const translations: Record<string, any> = {
     historyDesc: "看汝以前的检查记录。",
     noHistory: "朆有记录。",
     riskIndicator: "匹配度",
+    viewResearch: "看科研科学背景",
+    hideResearch: "收埋研究內容",
+    brainExercises: "脑力练习",
+    memoryJournal: {
+      title: "记忆日记",
+      desc: "写落回忆。我们会帮汝记录，帮汝加强记忆力。",
+      placeholder: "在此写落回忆...",
+      expand: "记录详细",
+      expanding: "咧谂...",
+      start: "开始写记忆日记",
+    },
+    tailoredRecs: {
+      low: [
+        "爱定定读册、学新物。保持大脑敏捷。",
+        "社会参与：参加社区团体或老友记活动中心。",
+        "体育锻炼：目标是每个礼拜做 150 分钟运动。",
+        "按照营养建议食饭，对抗退化。"
+      ],
+      medium: [
+        "爱去看家庭医生，做测验评估。",
+        "爱去验血。看是不是欠维他命 B12 等原因。",
+        "爱用辅助工具：用“每日记忆夹”存锁匙、钱包等物。",
+        "大脑训练：每日花 30 分钟做练习。"
+      ],
+      high: [
+        "即刻转院：去找老人科医生或记忆诊所进行检查。",
+        "安全评估：看厝内环境是否有跋倒风险。",
+        "法律甲财务规划：甲屋下人讨论持久授权书 (LPA)。",
+        "寻找寻找照顾或特殊认知疗法。"
+      ]
+    },
     newAssessment: "重来一回",
     reportTitle: "报告",
     analysisSummary: "摘要",
@@ -373,10 +631,18 @@ export const translations: Record<string, any> = {
     medicalDisclaimerDesc: "这只是供参考。唔是医生的正式诊断。请咨询医生。",
     languageDetected: "讲个话",
     indicator: "分数",
+    vocabularyVariety: "用词丰富",
+    vocabularyVarietyDesc: "汝用无共词汇个熟练程度。",
+    meaningfulness: "表达意义",
+    meaningfulnessDesc: "汝讲个话入面有几多实际意义。",
+    sentenceStyle: "句子风格",
+    sentenceStyleDesc: "汝按怎将词汇组合成句子。",
+    speechSmoothness: "说话顺畅度",
+    speechSmoothnessDesc: "汝说话顺唔顺，有无卡顿。",
     prompts: {
       stimulus: {
-        title: "描述一张图",
-        desc: "详细讲图中“偷饼干”的情况。"
+        title: "图中内容",
+        desc: "详讲图中发生的事。"
       },
       memory: {
         title: "讲一个故事",

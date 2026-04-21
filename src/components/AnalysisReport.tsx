@@ -4,7 +4,8 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertCircle, Brain, ScrollText, Mic2, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { AlertCircle, Brain, ScrollText, Mic2, AlertTriangle, ShieldCheck, Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { motion } from 'motion/react';
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, ResponsiveContainer
@@ -176,12 +177,57 @@ export function AnalysisReport({ result, t }: AnalysisReportProps) {
         <AlertTitle className="font-bold">{t.recommendations}</AlertTitle>
         <AlertDescription className="text-zinc-300">
           <ul className="list-disc list-inside mt-2 space-y-1">
-            {result.recommendations.map((rec, idx) => (
+            {(result.riskScore < 30 
+              ? t.tailoredRecs?.low 
+              : result.riskScore < 60 
+                ? t.tailoredRecs?.medium 
+                : t.tailoredRecs?.high)?.map((rec: string, idx: number) => (
+              <li key={idx}>{rec}</li>
+            )) || result.recommendations.map((rec, idx) => (
               <li key={idx}>{rec}</li>
             ))}
           </ul>
         </AlertDescription>
       </Alert>
+
+      {/* Brain Training Section */}
+      <div className="pt-4">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-zinc-900" />
+            {t.brainExercises || 'Brain Training'}
+          </h3>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Card className="bg-zinc-50 border-dashed border-2">
+            <CardContent className="pt-6">
+              <h4 className="font-bold text-sm mb-2">Mental Stimulation Tips</h4>
+              <ul className="text-xs text-zinc-500 space-y-2">
+                <li>• Try reading a book in a different language then translating one paragraph.</li>
+                <li>• Practice counting backwards from 100 by increments of 7 (e.g., 100, 93, 86...).</li>
+                <li>• Socialize daily—conversation is one of the best cognitive exercises.</li>
+              </ul>
+            </CardContent>
+          </Card>
+          <div className="bg-white">
+            <p className="text-sm text-zinc-500 mb-4 italic">
+              "Regular cognitive exercise can improve mental agility and build cognitive reserve."
+            </p>
+            <Button 
+              variant="outline" 
+              className="w-full text-xs font-bold uppercase tracking-wider"
+              onClick={() => {
+                const element = document.getElementById('memory-journal');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              {t.memoryJournal.start || 'Start Memory Journaling'}
+            </Button>
+          </div>
+        </div>
+      </div>
 
       {/* Medical Disclaimer */}
       <Alert variant="destructive" className="bg-rose-50 border-rose-200">

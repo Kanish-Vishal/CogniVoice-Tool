@@ -1,11 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ImageIcon, ChevronDown, ChevronUp, Sparkles, BookOpen, UserCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { Sparkles, BookOpen, UserCircle } from 'lucide-react';
+
+const STIMULUS_IMAGES = [
+  'https://picsum.photos/seed/cognitive-scene-1/600/400',
+  'https://picsum.photos/seed/cognitive-scene-2/600/400',
+  'https://picsum.photos/seed/cognitive-scene-3/600/400',
+  'https://picsum.photos/seed/cognitive-scene-4/600/400',
+  'https://picsum.photos/seed/cognitive-scene-5/600/400',
+  'https://picsum.photos/seed/cognitive-scene-6/600/400'
+];
 
 export function SamplePrompts({ t }: { t: any }) {
-  const [imageExpanded, setImageExpanded] = useState(false);
+  const [randomImage, setRandomImage] = useState<string>('');
+
+  useEffect(() => {
+    // Select a random image on mount
+    const idx = Math.floor(Math.random() * STIMULUS_IMAGES.length);
+    setRandomImage(STIMULUS_IMAGES[idx]);
+  }, []);
 
   const localizedPrompts = [
     {
@@ -14,7 +27,7 @@ export function SamplePrompts({ t }: { t: any }) {
       icon: <Sparkles className="h-4 w-4" />,
       title: t.prompts.stimulus.title,
       description: t.prompts.stimulus.desc,
-      imageUrl: 'https://raw.githubusercontent.com/allisonnicole/CookieTheft/master/CookieTheft.png'
+      imageUrl: randomImage
     },
     {
       idx: 1,
@@ -39,7 +52,7 @@ export function SamplePrompts({ t }: { t: any }) {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {localizedPrompts.map((item) => (
-          <Card key={item.idx} className="bg-white border-zinc-200 hover:border-zinc-300 transition-all group flex flex-col">
+          <Card key={item.idx} className="bg-white border-zinc-200 hover:border-zinc-300 transition-all group flex flex-col overflow-hidden">
             <CardHeader className="p-4 pb-2">
               <div className="flex items-center gap-2 mb-1">
                 <div className="p-1.5 bg-zinc-100 rounded-md text-zinc-600 transition-colors group-hover:bg-zinc-900 group-hover:text-white">
@@ -56,49 +69,14 @@ export function SamplePrompts({ t }: { t: any }) {
               
               <div className="mt-auto">
                 {item.imageUrl && (
-                  <>
-                    <AnimatePresence>
-                      {imageExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="p-2 bg-zinc-900 rounded-lg mb-3">
-                            <img 
-                              src={item.imageUrl} 
-                              alt="Cookie Theft Picture" 
-                              className="rounded w-full h-auto"
-                              referrerPolicy="no-referrer"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = "https://picsum.photos/seed/cognitive/800/600";
-                              }}
-                            />
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                    
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="w-full text-[10px] h-8 uppercase font-bold tracking-widest hover:bg-zinc-100"
-                      onClick={() => setImageExpanded(!imageExpanded)}
-                    >
-                      {imageExpanded ? (
-                        <>
-                          <ChevronUp className="mr-2 h-3 w-3" />
-                          {t.discard}
-                        </>
-                      ) : (
-                        <>
-                          <ImageIcon className="mr-2 h-3 w-3" />
-                          {t.reportTitle === 'Analysis Report' ? 'View Stimulus' : (t.reportTitle === '分析报告' ? '查看刺激物' : 'View Stimulus')}
-                        </>
-                      )}
-                    </Button>
-                  </>
+                  <div className="bg-zinc-100 rounded-lg group-hover:bg-zinc-50 transition-colors p-1">
+                    <img 
+                      src={item.imageUrl} 
+                      alt="Description Stimulus" 
+                      className="rounded shadow-inner w-full aspect-video object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
                 )}
               </div>
             </CardContent>

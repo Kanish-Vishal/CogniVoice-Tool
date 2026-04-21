@@ -1,13 +1,26 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI, Type, ThinkingLevel } from "@google/genai";
 import { AnalysisResult } from "../types";
 
 let aiInstance: any = null;
 
 function getAI() {
   if (!aiInstance) {
-    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+    // Safely check for the API key in both Vite and Node environments
+    let apiKey = '';
+    
+    try {
+      // @ts-ignore
+      apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    } catch (e) {}
+
     if (!apiKey) {
-      throw new Error("Gemini API Key is missing. Please ensure VITE_GEMINI_API_KEY is set in your .env file.");
+      try {
+        apiKey = process.env.GEMINI_API_KEY || '';
+      } catch (e) {}
+    }
+
+    if (!apiKey) {
+      throw new Error("Gemini API Key is missing. Please ensure VITE_GEMINI_API_KEY is set in your .env file or GEMINI_API_KEY is set in your environment.");
     }
     aiInstance = new GoogleGenAI({ apiKey });
   }
@@ -18,41 +31,40 @@ const SYSTEM_PROMPT = `You are a helpful speech and memory assistant. Your goal 
 
 Singapore-specific Context:
 - Be sensitive to code-switching (Singlish) and transitions between English, Mandarin, Malay, Tamil, and Chinese dialects (Hokkien, Cantonese, Teochew).
-- Distinguish between natural multilingual speech and real stumbles or confusion.
+- Distinguish between natural multilingual speech and real stumbles or stutters.
 
 Focus on:
-1. Meaningfulness: Are they using simple or vague words instead of specific ones?
-2. Sentences: Are their sentences very short or simple?
-3. Vocabulary: Do they repeat the same few words often?
-4. Stumbles: Are there many unusual pauses or hesitations?
-5. Voice: Is their speech unusually slow or the rhythm irregular?
+1. Meaningfulness: Vague words instead of specific ones?
+2. Sentences: Too short or disconnected?
+3. Vocabulary: Excessive repetition?
+4. Stumbles: Unusual pauses or hesitations?
+5. Voice: Slow speed or irregular rhythm?
 
 IMPORTANT: 
-- Use simple, everyday language that anyone can understand.
-- Avoid scientific terms like "Semantic Density" or "Syntactic Complexity" in your explanations.
+- Use simple, everyday language.
 - Provide a summary and helpful next steps.
-- This is for information only. Always include a disclaimer that this is not a medical diagnosis.`;
+- Disclaimer: This is not a medical diagnosis.`;
 
 const RESPONSE_SCHEMA = {
   type: Type.OBJECT,
   properties: {
-    riskScore: { type: Type.NUMBER, description: "Composite risk score from 0-100" },
+    riskScore: { type: Type.NUMBER, description: "Composite match score from 0 to 100. Lower is healthier (normal patterns), Higher indicates stronger match with cognitive markers." },
     linguisticMetrics: {
       type: Type.OBJECT,
       properties: {
-        semanticDensity: { type: Type.NUMBER, description: "0-1 score" },
-        syntacticComplexity: { type: Type.NUMBER, description: "0-1 score" },
-        lexicalRichness: { type: Type.NUMBER, description: "0-1 score" },
-        disfluencyRate: { type: Type.NUMBER, description: "0-1 score" }
+        semanticDensity: { type: Type.NUMBER, description: "Score from 0 to 1" },
+        syntacticComplexity: { type: Type.NUMBER, description: "Score from 0 to 1" },
+        lexicalRichness: { type: Type.NUMBER, description: "Score from 0 to 1" },
+        disfluencyRate: { type: Type.NUMBER, description: "Score from 0 to 1" }
       },
       required: ["semanticDensity", "syntacticComplexity", "lexicalRichness", "disfluencyRate"]
     },
     vocalCharacteristics: {
       type: Type.OBJECT,
       properties: {
-        pauseFrequency: { type: Type.NUMBER },
-        speechRate: { type: Type.NUMBER },
-        toneStability: { type: Type.NUMBER }
+        pauseFrequency: { type: Type.NUMBER, description: "Score from 0 to 1" },
+        speechRate: { type: Type.NUMBER, description: "Score from 0 to 1" },
+        toneStability: { type: Type.NUMBER, description: "Score from 0 to 1" }
       },
       required: ["pauseFrequency", "speechRate", "toneStability"]
     },
@@ -65,7 +77,7 @@ const RESPONSE_SCHEMA = {
       items: { type: Type.STRING }
     },
     transcript: { type: Type.STRING },
-    language: { type: Type.STRING, description: "The detected or primary language of the recording" }
+    language: { type: Type.STRING }
   },
   required: ["riskScore", "linguisticMetrics", "vocalCharacteristics", "keyFindings", "recommendations", "transcript", "language"]
 };
@@ -78,10 +90,10 @@ export async function analyzeSpeech(base64Audio: string, mimeType: string, selec
       contents: [
         {
           parts: [
-            { text: `Analyze this speech sample (mostly in ${selectedLanguage}) for linguistic and vocal markers of cognitive decline. 
-             Note that the speaker may use Singlish or code-switch. 
-             IMPORTANT: Provide the "keyFindings" and "recommendations" in ${selectedLanguage} so the user can understand the results in their primary language. 
-             Provide the complete result in the specified JSON format.` },
+            { text: `Analyze this speech sample (mostly in ${selectedLanguage}) for markers of cognitive decline. 
+             Speaker may use Singlish/multilingual code-switching. 
+             Provide results (keyFindings/recommendations) in ${selectedLanguage}. 
+             Return valid JSON matching the schema.` },
             { 
               inlineData: {
                 data: base64Audio,
@@ -94,7 +106,8 @@ export async function analyzeSpeech(base64Audio: string, mimeType: string, selec
       config: {
         systemInstruction: SYSTEM_PROMPT,
         responseMimeType: "application/json",
-        responseSchema: RESPONSE_SCHEMA
+        responseSchema: RESPONSE_SCHEMA,
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW }
       }
     });
 
@@ -122,5 +135,31 @@ export async function analyzeSpeech(base64Audio: string, mimeType: string, selec
     }
 
     throw new Error(error.message || "Failed to analyze speech. Please try again.");
+  }
+}
+
+export async function expandJournal(entry: string, language: string = "English"): Promise<string> {
+  try {
+    const ai = getAI();
+    const prompt = `The user wrote this short memory journal entry in ${language}: "${entry}". 
+    Your goal is to help them bridge memory gaps and encourage deeper recollection.
+    1. Acknowledge the memory warmly.
+    2. Ask 2-3 specific, evocative questions based on what they wrote (e.g., if they mentioned a garden, ask about the smells or the weather).
+    3. Encourage them to write more.
+    IMPORTANT: Respond entirely in ${language}. Keep the tone supportive and clinical-adjacent but friendly.`;
+
+    const result = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: [{ parts: [{ text: prompt }] }],
+      config: {
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW }
+      }
+    });
+
+    const responseText = result.text;
+    return responseText || "I was unable to process that. Please try writing a bit more.";
+  } catch (error: any) {
+    console.error("Journal Expansion Error:", error);
+    throw new Error("Failed to connect to AI for memory expansion.");
   }
 }
