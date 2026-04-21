@@ -5,22 +5,12 @@ let aiInstance: any = null;
 
 function getAI() {
   if (!aiInstance) {
-    // Safely check for the API key in both Vite and Node environments
-    let apiKey = '';
-    
-    try {
-      // @ts-ignore
-      apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    } catch (e) {}
+    // Vite will replace this string with the actual key during build
+    // process.env.GEMINI_API_KEY is mapped in vite.config.ts
+    const apiKey = process.env.GEMINI_API_KEY;
 
     if (!apiKey) {
-      try {
-        apiKey = process.env.GEMINI_API_KEY || '';
-      } catch (e) {}
-    }
-
-    if (!apiKey) {
-      throw new Error("Gemini API Key is missing. Please ensure VITE_GEMINI_API_KEY is set in your .env file or GEMINI_API_KEY is set in your environment.");
+      throw new Error("Missing Gemini API Key. Please set VITE_GEMINI_API_KEY or GEMINI_API_KEY in your Vercel Environment Variables.");
     }
     aiInstance = new GoogleGenAI({ apiKey });
   }
